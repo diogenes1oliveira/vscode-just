@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { COMMANDS, EXTENSION_NAME, SETTINGS } from './const';
-import { formatWithExecutable } from './format';
+import { dumpWithExecutable, formatWithExecutable } from './format';
 import { getLauncher } from './launcher';
 import { getLogger } from './logger';
 import { runRecipeCommand } from './recipe';
@@ -20,6 +20,30 @@ export const activate = (context: vscode.ExtensionContext) => {
     },
   );
   context.subscriptions.push(formatDisposable);
+
+  // Install as a document formatter for just files (allows setting "editor.defaultFormatter")
+  const documentFormatProviderDisposable =
+    vscode.languages.registerDocumentFormattingEditProvider('just', {
+      provideDocumentFormattingEdits(
+        document: vscode.TextDocument,
+      ): Promise<vscode.TextEdit[]> {
+        return dumpWithExecutable(document.uri.fsPath)
+          .then((formattedText) => [
+            vscode.TextEdit.replace(
+              new vscode.Range(
+                document.lineAt(0).range.start,
+                document.lineAt(document.lineCount - 1).rangeIncludingLineBreak.end,
+              ),
+              formattedText,
+            ),
+          ])
+          .catch((error) => {
+            vscode.window.showErrorMessage(`Failed to format document: ${error}`);
+            return [];
+          });
+      },
+    });
+  context.subscriptions.push(documentFormatProviderDisposable);
 
   const runRecipeDisposable = vscode.commands.registerCommand(
     COMMANDS.runRecipe,
