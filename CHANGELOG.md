@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-02-01
+
 ### Added
 
 - Builtins, color constants and recipe attributes from `just` release 1.38.0 through 1.46.0
