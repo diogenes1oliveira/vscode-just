@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.9.1-rc.1] - 2026-02-14
+
+### Added
+
+- `.nvmrc` and `.envrc` examples
+
 ## [0.9.0] - 2026-02-01
 
 ### Added

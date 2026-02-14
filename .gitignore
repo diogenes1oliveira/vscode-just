@@ -13,6 +13,8 @@ node_modules
 
 # environment
 .env*
+!/.envrc.example
+.nvmrc
 
 # yarn
 yarn-error.log
