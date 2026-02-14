@@ -8,6 +8,10 @@
 
 - `.nvmrc` and `.envrc` examples
 
+### Fixed
+
+- added git to dev container
+
 ## [0.9.0] - 2026-02-01
 
 ### Added

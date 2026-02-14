@@ -4,7 +4,7 @@ ENV YARN_CACHE_FOLDER=/root/.yarn
 
 # TODO: add xvfb for integration tests
 RUN apk update && \
-  apk add just
+  apk add just git
 
 WORKDIR /code
 COPY package.json yarn.lock ./
