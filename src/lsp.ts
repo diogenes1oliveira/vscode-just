@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import * as path from 'path';
 import * as vscode from 'vscode';
 import {
   LanguageClient,
@@ -6,8 +7,8 @@ import {
   ServerOptions,
 } from 'vscode-languageclient/node';
 
-import { EXTENSION_NAME, SETTINGS } from './const';
 import { getLogger } from './logger';
+import { getJustPath, getLspPath, isDefaultJust } from './utils';
 
 const LOGGER = getLogger();
 
@@ -15,8 +16,18 @@ let client: LanguageClient | undefined;
 
 export const createLanguageClient = async (): Promise<LanguageClient | null> => {
   const lspPath = getLspPath();
+  const justPath = getJustPath();
 
-  const isAvailable = await checkLspAvailability(lspPath);
+  const env = { ...process.env };
+
+  if (!isDefaultJust(justPath)) {
+    const justDir = path.dirname(justPath);
+    if (justDir !== '.') {
+      env.PATH = `${justDir}${path.delimiter}${env.PATH || ''}`;
+    }
+  }
+
+  const isAvailable = await checkLspAvailability(lspPath, env);
   if (!isAvailable) {
     vscode.window
       .showWarningMessage(
@@ -37,6 +48,7 @@ export const createLanguageClient = async (): Promise<LanguageClient | null> => 
   const serverOptions: ServerOptions = {
     command: lspPath,
     args: [],
+    options: { env },
   };
 
   const clientOptions: LanguageClientOptions = {
@@ -74,9 +86,12 @@ export const stopLanguageClient = async (): Promise<void> => {
   }
 };
 
-const checkLspAvailability = (lspPath: string): Promise<boolean> => {
+const checkLspAvailability = (
+  lspPath: string,
+  env: NodeJS.ProcessEnv,
+): Promise<boolean> => {
   return new Promise((resolve) => {
-    const process = spawn(lspPath, ['--version'], { stdio: 'ignore' });
+    const process = spawn(lspPath, ['--version'], { stdio: 'ignore', env });
 
     process.on('close', (code: number) => {
       resolve(code === 0);
@@ -90,13 +105,4 @@ const checkLspAvailability = (lspPath: string): Promise<boolean> => {
       resolve(false);
     }, 5000);
   });
-};
-
-const getLspPath = (): string => {
-  // TODO: support bundled LSP binary
-  return (
-    (vscode.workspace
-      .getConfiguration(EXTENSION_NAME)
-      .get(SETTINGS.lspPath) as string) || 'just-lsp'
-  );
 };

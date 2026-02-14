@@ -6,11 +6,12 @@
 
 ### Added
 
-- `.nvmrc` and `.envrc` examples
+- VSCode variable interpolations for `.justPath` and `.lspPath`
+- Examples for `.nvmrc` and `.envrc`
 
 ### Fixed
 
-- added git to dev container
+- Added missing git package to dev container
 
 ## [0.9.0] - 2026-02-01
 
