@@ -18,7 +18,7 @@ const extensionConfig = {
   entry: './src/extension.ts',
   output: {
     path: resolve(__dirname, 'dist'),
-    filename: 'extension.js',
+    filename: 'extensions.js',
     libraryTarget: 'commonjs2',
   },
   externals: {

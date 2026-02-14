@@ -8,6 +8,7 @@
 
 - VSCode variable interpolations for `.justPath` and `.lspPath`
 - Examples for `.nvmrc` and `.envrc`
+- Building and publishing the `.vsix` extension
 
 ### Fixed
 

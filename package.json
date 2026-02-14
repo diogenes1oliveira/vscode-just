@@ -17,6 +17,8 @@
     "compile-extension": "webpack",
     "watch": "webpack --watch --verbose",
     "package": "webpack --mode production --devtool hidden-source-map",
+    "package-vscode": "vsce package",
+    "vscode:prepublish": "yarn run package",
     "compile": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "yarn compile && yarn compile-extension",
@@ -35,7 +37,7 @@
     "scripts"
   ],
   "icon": "icons/robot.png",
-  "main": "./dist/extension.js",
+  "main": "./dist/extensions.js",
   "contributes": {
     "languages": [
       {
@@ -135,7 +137,7 @@
     "@types/vscode": "^1.94.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
-    "@vscode/vsce": "^3.1.1",
+    "@vscode/vsce": "^3.7.1",
     "eslint": "^9.12.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
